@@ -1,24 +1,128 @@
+#  Flood Detection Using Sentinel-1 SAR Imagery
 
-This project aims to implement a robust and automated solution for **binary flood classification** (Flood vs. Non-Flood) using Synthetic Aperture Radar (SAR) imagery from the **Sentinel-1** mission, leveraging the **SEN12FLOOD** dataset.
+### Machine Learning & Deep Learning for Automated Flood Mapping
 
- **Task (T):**
-The task is to enable the machine learning model to detect and predict flooded areas from satellite imagery.
+**A research-grade project leveraging CNN, Random Forest, and SVM-RBF classifiers for detecting flooded areas using Sentinel-1 SAR data.**
 
-**Why SAR?**  
-- **VV** emphasizes reflections from smooth surfaces (water, infrastructure).  
-- **VH** emphasizes cross-polarized scattering from vegetation and rough terrain.  
-Together, they provide complementary flood cues even under clouds or night conditions.
+---
 
- **Our Approach:**
+##  Overview
 
-We employ a comprehensive machine learning pipeline, culminating in a **Convolutional Neural Network (CNN) classifier**, built on the following key technical steps:
+Floods are among the most devastating natural disasters, representing **44% of global disaster impacts**. With the rise of satellite-based monitoring and AI, flood detection can now be automated—offering faster, more reliable insights during emergencies.
 
-1.  **Preprocessing & Feature Engineering:** We convert raw VV/VH backscatter data to the $\text{dB}$ scale, apply the **Lee speckle filter** for noise reduction, and generate a set of **six advanced SAR features** (including polarization ratios and differences) for enhanced discrimination between water and land.
-2.  **Data Preparation:** The image tiles are meticulously processed, split into Train/Validation/Test sets, and carefully **balanced** to ensure the model trains effectively on both flood and non-flood scenarios.
-3.  **Model Training:** A  CNN architecture is trained to accurately classify 256x256 image tiles, addressing the critical challenge of rapid and reliable flood mapping.
+This project builds a **supervised machine learning pipeline** using **Sentinel-1 SAR imagery** to classify tiles as **Flooded (1)** or **Not Flooded (0)**.
+We implement and compare **three models**:
+
+*  **Convolutional Neural Network (CNN)**
+*  **Random Forest (RF)**
+*  **Support Vector Machine – RBF (SVM-RBF)**
+
+The goal is to evaluate which approach provides the most reliable and generalizable performance for flood detection, with relevance to real-world decision-making and alignment with the Kingdom of Saudi Arabia’s **Vision 2030** for disaster preparedness and sustainable urban planning.
+
+---
+
+## 🛰️ Task Definition
+
+**Input:** Sentinel-1 SAR features (VV, VH) + engineered bands
+**Output:** Binary classification → `1 = Flooded`, `0 = Non-Flooded`
+**Metrics:** Accuracy, Precision, Recall, F1-score, ROC-AUC, PR-AUC
+
+A full pipeline—from preprocessing to model evaluation—is illustrated in the workflow diagram (Figure 1 in the report).
+
+---
+
+##  Dataset
+
+We use the **SEN12-FLOOD dataset**, a large-scale benchmark combining:
+
+* Sentinel-1 SAR (VV, VH)
+* Flood masks in GeoJSON
+* 3,331 tiles (525×614 px)
+* Global coverage via Radiant Earth
+
+### Why SEN12-FLOOD?
+
+* Designed **specifically** for flood mapping
+* Reliable under cloud/weather conditions
+* Provides rich metadata (date, orbit, tile ID)
+* Open, reproducible, widely used in academic research
+
+---
+
+##  Methods
+
+Three classification approaches were implemented and compared:
+
+### 1️ Convolutional Neural Network (CNN)
+
+* End-to-end tile classification
+* Learns spatial flood textures directly
+* Uses 256×256×6 engineered feature tiles
+* Best-performing model in this project
+
+### 2️ Random Forest (RF)
+
+* Classical non-deep learning baseline
+* Operates on flattened feature vectors
+* Strong recall, moderate precision
+* Robust to SAR noise but prone to false positives
+
+### 3️ SVM-RBF
+
+* High-dimensional nonlinear classifier
+* Requires StandardScaler + RBF feature mapping
+* Weak performance on SAR flood features
+* High FN rates → unsuitable for deployment
+
+###  Feature Engineering
+
+We generated **six SAR-based features**:
+`VV_dB, VH_dB, VV+VH, VV−VH, VV/VH, VV×VH`
+
+These features enhance flood vs. non-flood separability.
+
+---
+
+##  Experiment Pipeline
+
+* Standardized preprocessing for all models
+* Balanced training set; unbalanced validation/test for realism
+* GPU-accelerated CNN training (Google Colab T4)
+* Hyperparameter tuning for all models
+* Unified evaluation protocol (Confusion Matrix, ROC, PR curves)
+
+---
+
+##  Results
+
+| Metric    | CNN      | Random Forest | SVM-RBF |
+| --------- | -------- | ------------- | ------- |
+| Accuracy  | **0.82** | 0.73          | 0.60    |
+| Precision | **0.84** | 0.54          | 0.32    |
+| Recall    | **0.89** | 0.86          | 0.29    |
+| F1-score  | **0.76** | 0.66          | 0.30    |
+| ROC-AUC   | **0.91** | 0.82          | 0.51    |
+
+###  Summary
+
+* **CNN is the strongest model**, with excellent recall of flooded tiles
+* RF performs reasonably but suffers from high false positives
+* SVM-RBF fails to generalize, biased toward the Non-Flood class
 
 
- **Dataset Source:**
-SEN12-FLOOD — Sentinel-1 Synthetic Aperture Radar (SAR) with flood annotations in GeoJSON.  
-https://www.kaggle.com/datasets/virajkadam/sen12flood
+---
+
+
+##  How to Run
+
+```bash
+# Clone repository
+git clone https://github.com/Layan20102/flood-detection-models.git
+cd flood-detection-sar
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+Place dataset tiles in the designated folder and run the notebook to reproduce training and evaluation.
 
