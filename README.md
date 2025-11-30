@@ -109,5 +109,29 @@ These features enhance flood vs. non-flood separability.
 * RF performs reasonably but suffers from high false positives
 * SVM-RBF fails to generalize, biased toward the Non-Flood class
 
+project/
+│
+├── Notebook/
+│   ├── Flood_Detection_Notebook.ipynb     # Main training & evaluation notebook
+│   └── Model_Live_Testing.ipynb           # Streamlit-based live model testing
+│
+├── docs/
+│   └── img/                               
+│       └── header.png                     # Documentation images
+│
+├── mini_data/                             
+│   ├── sen12floods_s1_labels_0020_....npz # 5 sample tiles for testing models
+│   ├── sen12floods_s1_labels_0140_....npz
+│   ├── sen12floods_s1_labels_46_....npz
+│   ├── sen12floods_s1_labels_54_....npz
+│   └── sen12floods_s1_labels_58_....npz
+│
+├── models/
+│   ├── best_model.keras                   # CNN model
+│   ├── best_rf_model.pkl                  # Random Forest model
+│   └── svm_rbf_approx.joblib (external link due to size)
+│
+├── AUTHORS.md
+└── README.md
 
 
