@@ -109,29 +109,41 @@ These features enhance flood vs. non-flood separability.
 * RF performs reasonably but suffers from high false positives
 * SVM-RBF fails to generalize, biased toward the Non-Flood class
 
+
+
+## 📂 Project Structure
+
+```
 project/
 │
 ├── Notebook/
-│   ├── Flood_Detection_Notebook.ipynb     # Main training & evaluation notebook
-│   └── Model_Live_Testing.ipynb           # Streamlit-based live model testing
+│   ├── Flood_Detection_Notebook.ipynb       # Training, evaluation, metrics
+│   └── Model_Live_Testing.ipynb             # Streamlit live testing
 │
 ├── docs/
-│   └── img/                               
-│       └── header.png                     # Documentation images
+│   └── img/
+│       └── header.png
 │
-├── mini_data/                             
-│   ├── sen12floods_s1_labels_0020_....npz # 5 sample tiles for testing models
+├── mini_data/
+│   ├── sen12floods_s1_labels_0020_....npz
 │   ├── sen12floods_s1_labels_0140_....npz
 │   ├── sen12floods_s1_labels_46_....npz
 │   ├── sen12floods_s1_labels_54_....npz
 │   └── sen12floods_s1_labels_58_....npz
 │
 ├── models/
-│   ├── best_model.keras                   # CNN model
-│   ├── best_rf_model.pkl                  # Random Forest model
-│   └── svm_rbf_approx.joblib (external link due to size)
+│   ├── best_model.keras                     # CNN model
+│   ├── best_rf_model.pkl                    # Random Forest model
+│   └── (SVM model stored externally due to size)
 │
 ├── AUTHORS.md
 └── README.md
+```
+
+> **Note:**
+> The SVM model is large (≈3 GB) and is stored externally.
+> You can download it here:
+> **SVM-RBF Model Download:** *[SVM-RBF Model](https://drive.google.com/file/d/1sLP8f247J6LxzfvuPFhUHSI76yOvrMpB/view?usp=drive_link)*
+
 
 
